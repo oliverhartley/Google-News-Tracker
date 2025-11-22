@@ -32,6 +32,7 @@ function getSpreadsheet() {
   if (savedId) {
     try {
       ss = SpreadsheetApp.openById(savedId);
+      console.log('Opened Spreadsheet from saved ID.');
       return ss;
     } catch (e) {
       console.warn('Saved Spreadsheet ID not valid or not accessible. Trying active or creating new.');
@@ -47,6 +48,7 @@ function getSpreadsheet() {
   
   if (ss) {
     props.setProperty('SPREADSHEET_ID', ss.getId());
+    console.log('Opened Active Spreadsheet.');
     return ss;
   }
 
@@ -55,6 +57,7 @@ function getSpreadsheet() {
   try {
     ss = SpreadsheetApp.openById(HARDCODED_ID);
     props.setProperty('SPREADSHEET_ID', HARDCODED_ID);
+    console.log('Opened Hardcoded Spreadsheet.');
     return ss;
   } catch (e) {
     console.warn('Could not open hardcoded spreadsheet. Creating new.');
@@ -80,6 +83,7 @@ function ensureSheetStructure(ss) {
   allNames.forEach(name => {
     let sheet = ss.getSheetByName(name);
     if (!sheet) {
+      console.log(`Creating missing sheet: ${name}`);
       sheet = ss.insertSheet(name);
       // Set headers based on sheet type
       if (name.includes('Youtube')) {

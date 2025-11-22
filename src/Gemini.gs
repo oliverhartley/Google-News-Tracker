@@ -29,6 +29,7 @@ function callGemini(payload) {
   const response = UrlFetchApp.fetch(url, options);
   const code = response.getResponseCode();
   const text = response.getContentText();
+  console.log(`Gemini API Response Code: ${code}`);
   
   if (code !== 200) {
     throw new Error(`Gemini API Error (${code}): ${text}`);
@@ -77,7 +78,9 @@ function analyzeNewsItem(title, content, type) {
   try {
     const result = callGemini(payload);
     const text = result.candidates[0].content.parts[0].text;
-    return JSON.parse(text);
+    const parsed = JSON.parse(text);
+    console.log(`Analysis result: Section=${parsed.section}, SubSection=${parsed.subSection}`);
+    return parsed;
   } catch (e) {
     console.error('Error analyzing news item:', e);
     return { section: 'Unclassified', subSection: 'General', summary: 'Analysis failed' };

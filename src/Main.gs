@@ -106,6 +106,7 @@ function processFeed(url, type) {
     }
     
     newItems.push(data);
+    console.log(`Accepted item: ${data.title}`);
     } catch (e) {
       console.warn('Error parsing item:', e);
     }
@@ -115,12 +116,16 @@ function processFeed(url, type) {
   if (newItems.length === 0) return;
   
   // 3. Analyze with Gemini
-  const processedItems = newItems.map(item => {
+  console.log('Starting Gemini analysis for new items...');
+  const processedItems = newItems.map((item, index) => {
+    console.log(`Analyzing item ${index + 1}/${newItems.length}: ${item.title}`);
     const analysis = analyzeNewsItem(item.title, item.content, type);
     return { ...item, ...analysis };
   });
+  console.log('Gemini analysis complete.');
   
   // 4. Save to Staging Sheet
+  console.log(`Saving ${processedItems.length} items to ${sheetNames.STAGING}...`);
   saveNewsToStaging(sheetNames.STAGING, processedItems);
   
   // 5. Group by Section and Create Docs
@@ -135,6 +140,7 @@ function processFeed(url, type) {
   
   for (const section in grouped) {
     const sectionItems = grouped[section];
+    console.log(`Generating Doc for section: ${section} (${sectionItems.length} items)...`);
     const docContent = generateDocContent(sectionItems, `${type} - ${section}`);
     
     // Create Doc
