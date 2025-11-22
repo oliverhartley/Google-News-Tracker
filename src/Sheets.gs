@@ -49,6 +49,16 @@ function getSpreadsheet() {
     props.setProperty('SPREADSHEET_ID', ss.getId());
     return ss;
   }
+
+  // Use hardcoded ID provided by user
+  const HARDCODED_ID = '13r8Cyq7zIjJWDQKMqe0IuBn8WxpAu2IV-_v2M69MEp8';
+  try {
+    ss = SpreadsheetApp.openById(HARDCODED_ID);
+    props.setProperty('SPREADSHEET_ID', HARDCODED_ID);
+    return ss;
+  } catch (e) {
+    console.warn('Could not open hardcoded spreadsheet. Creating new.');
+  }
   
   // Create new
   ss = SpreadsheetApp.create('Google News Tracker');

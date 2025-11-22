@@ -7,15 +7,18 @@
  * Setup function to initialize properties.
  * Run this once manually.
  */
-function setupApiKey() {
-  const ui = SpreadsheetApp.getUi();
-  const response = ui.prompt('Gemini API Setup', 'Please enter your Gemini API Key:', ui.ButtonSet.OK_CANCEL);
-  
-  if (response.getSelectedButton() == ui.Button.OK) {
-    const key = response.getResponseText();
-    setScriptProperty('GEMINI_API_KEY', key);
-    ui.alert('API Key saved successfully.');
+/**
+ * Sets the Gemini API Key.
+ * Run this function manually from the Apps Script editor with your key.
+ * @param {string} key Your Gemini API Key.
+ */
+function setGeminiKey(key) {
+  if (!key) {
+    console.error('Please provide a key. Usage: setGeminiKey("YOUR_KEY")');
+    return;
   }
+  setScriptProperty('GEMINI_API_KEY', key);
+  console.log('API Key saved successfully.');
 }
 
 /**
