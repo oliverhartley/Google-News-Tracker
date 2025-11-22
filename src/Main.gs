@@ -97,9 +97,15 @@ function processFeed(url, type) {
       if (!isWithinLastNDays(data.date, 14)) return;
       
       // Filter: Duplicates
-      if (existingLinks.includes(data.link)) return;
-      
-      newItems.push(data);
+    if (existingLinks.includes(data.link)) return;
+    
+    // Filter: Weekly Recaps (User request)
+    if (data.title && data.title.includes('Google Workspace Updates Weekly Recap')) {
+      console.log(`Skipping weekly recap: ${data.title}`);
+      return;
+    }
+    
+    newItems.push(data);
     } catch (e) {
       console.warn('Error parsing item:', e);
     }
